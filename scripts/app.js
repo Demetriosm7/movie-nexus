@@ -12,10 +12,21 @@ const spinner = document.getElementById("loading-spinner"); // Loading spinner e
 let currentMovies = []; // Stores the current search results for watchlist functionality
 
 // Movie Search Functionality
-searchButton.addEventListener("click", () => {
+function handleSearch() {
   const query = searchInput.value.trim();
   if (query !== "") {
     fetchMovies(query);
+  }
+}
+
+// Click event for search button
+searchButton.addEventListener("click", handleSearch);
+
+// Enter key event for search input
+searchInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault(); // Prevent form submission if inside a form
+    handleSearch();
   }
 });
 
@@ -23,6 +34,7 @@ searchButton.addEventListener("click", () => {
 async function fetchMovies(query) {
   // Show loading spinner
   spinner.classList.remove("hidden");
+  searchButton.disabled = true; // Disable search button while loading
   resultsSection.innerHTML = ""; // Clear previous results
 
   try {
@@ -41,6 +53,7 @@ async function fetchMovies(query) {
   } finally {
     // Hide loading spinner
     spinner.classList.add("hidden");
+    searchButton.disabled = false; // Re-enable search button
   }
 }
 
